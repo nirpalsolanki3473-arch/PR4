@@ -160,8 +160,7 @@ Metric      → field-parameter / dynamic metric selector table
 ![Data Model](data-model.png)
 
 ## DAX formulas 
-
-[DAX Calculated Columns](DAX(1)calculated column).txt)
+[DAX Calculated Columns](<DAX(1)calculated column).txt>)
 
 ---
 
