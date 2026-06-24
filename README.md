@@ -158,6 +158,11 @@ Metric      → field-parameter / dynamic metric selector table
 
 ## Data Model
 ![Data Model](data-model.png)
+
+## DAX formulas 
+
+[DAX Calculated Columns](DAX(1)calculated%20column).txt)
+
 ---
 
 ## 📌 Future Improvements
