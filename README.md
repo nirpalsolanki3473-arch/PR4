@@ -96,9 +96,8 @@ Metric      → field-parameter / dynamic metric selector table
 | `_Measures` | Houses all DAX measures used across the report |
 | `Metric` | Parameter table powering the dynamic "Metric" slicer on the Attrition page |
 
-**Relationship diagram:**
-
-![Data Model Relationships](screenshots/data-model.png)
+## Data Model
+![Data Model](data-model.png)
 
 ### Key Measures
 - `Total_Headcount`, `Active_Headcount`
@@ -155,9 +154,6 @@ Metric      → field-parameter / dynamic metric selector table
 
 ### Compensation Page
 ![Compensation Dashboard](compensation.png)
-
-## Data Model
-![Data Model](data-model.png)
 
 ## DAX formulas 
 [DAX Calculated Columns](<DAX(1)calculated column).txt>)
