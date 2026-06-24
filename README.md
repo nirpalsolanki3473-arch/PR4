@@ -156,6 +156,8 @@ Metric      → field-parameter / dynamic metric selector table
 ### Compensation Page
 ![Compensation Dashboard](compensation.png)
 
+## Data Model
+![Data Model](data-model.png)
 ---
 
 ## 📌 Future Improvements
