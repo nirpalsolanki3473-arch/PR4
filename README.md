@@ -2,7 +2,7 @@
 
 An interactive Power BI dashboard for tracking workforce health: headcount, attrition, diversity, performance, and compensation. Built as a single `.pbix` file with three report pages and a star-schema data model.
 
-overview.png
+![Overview Dashboard](overview.png)
 
 ---
 
@@ -148,7 +148,7 @@ Metric      → field-parameter / dynamic metric selector table
 ## 📸 Screenshots
 
 ### Overview Page
-![Overview](screenshots/overview.png)
+![Overview Dashboard](overview.png)
 
 ### Attrition Page
 ![Attrition Dashboard](attrition.png)
