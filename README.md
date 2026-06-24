@@ -151,7 +151,7 @@ Metric      → field-parameter / dynamic metric selector table
 ![Overview](screenshots/overview.png)
 
 ### Attrition Page
-![Attrition](screenshots/attrition.png)
+![Attrition Dashboard](attrition.png)
 
 ### Compensation Page
 ![Compensation](screenshots/compensation.png)
