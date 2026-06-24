@@ -1,0 +1,289 @@
+DAX(1)calculated column)
+
+(1)Metric = {
+    ("Total_Headcount", NAMEOF('_Measures'[Total_Headcount]), 0),
+    ("New_Hires_SPLY", NAMEOF('_Measures'[New_Hires_SPLY]), 1)
+}
+
+
+(2)Above_Avg_Salary_Flag = 
+IF(
+    EmployeeMaster[Salary] >
+    CALCULATE(
+        [Avg_Salary],
+        ALL(EmployeeMaster)
+    ),
+    1,
+    0
+
+
+(3)Career_Level_Band = 
+SWITCH(
+    TRUE(),
+    EmployeeMaster[Tenure_Years] < 2, "Early Career",
+    EmployeeMaster[Tenure_Years] < 5, "Mid Career",
+    EmployeeMaster[Tenure_Years] < 10, "Senior",
+    "Veteran"
+)
+
+
+(4)Days_Since_Hire = 
+DATEDIFF(
+    EmployeeMaster[DateOfJoining],
+    TODAY(),
+    DAY
+)
+
+
+(5)Full_Name = 
+EmployeeMaster[FirstName] & " " & EmployeeMaster[LastName]
+
+
+(6)Hire_Year_Month = 
+FORMAT(EmployeeMaster[DateOfJoining], "yyyy-MM")
+
+
+(7)Is_Active = 
+IF(
+    EmployeeMaster[EmployeeStatus] = "Active",
+    1,
+    0
+)
+
+
+(8)Performance_Label = 
+SWITCH(
+    EmployeeMaster[Current Employee Rating],
+    5, "Exceeds",
+    4, "Fully Meets",
+    3, "Needs Improvement",
+    2, "PIP",
+    1, "PIP"
+)
+
+
+(9)Salary_Band = 
+SWITCH(
+    TRUE(),
+    EmployeeMaster[Salary] >= 100000, "A",
+    EmployeeMaster[Salary] >= 75000, "B",
+    EmployeeMaster[Salary] >= 50000, "C",
+    "D"
+)
+
+
+(10)Salary_Formatted = 
+FORMAT(
+    EmployeeMaster[Salary],
+    "$#,##0"
+)
+
+
+(11)Tenure_Years = 
+DATEDIFF(
+    EmployeeMaster[DateOfJoining],
+    IF(
+        EmployeeMaster[EmployeeStatus] = "Active",
+        TODAY(),
+        EmployeeMaster[DateOfTermination]
+    ),
+    YEAR
+)
+
+
+
+
+DAX(2)Measure)
+
+(1)Active_Headcount = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    EmployeeMaster[Is_Active] = 1
+)
+
+
+(2)Attrition_Rate_% = 
+DIVIDE(
+    [Terminated_Count],
+    [Total_Headcount],
+    0
+)
+
+
+(3)Attrition_Rate_YTD = 
+DIVIDE(
+    CALCULATE(
+        TOTALYTD(
+            COUNTROWS(EmployeeMaster),
+            DimDate[Date]
+        ),
+        USERELATIONSHIP(
+            DimDate[Date],
+            EmployeeMaster[DateOfTermination]
+        )
+    ),
+    [Active_Headcount]
+)
+
+
+(4)Avg_Performance_Rating = 
+AVERAGE(EmployeeMaster[Current Employee Rating])
+
+
+(5)Avg_Salary = 
+AVERAGE(EmployeeMaster[Salary])
+
+
+(6)Avg_Tenure = 
+AVERAGE(EmployeeMaster[Tenure_Years])
+
+
+(7)Avg_Training_Cost = 
+AVERAGEX(
+    Training,
+    Training[Training Cost]
+)
+
+
+(8)Bench_Utilisation_% = 
+DIVIDE(
+    CALCULATE(
+        [Active_Headcount],
+        EmployeeMaster[EmployeeStatus] = "Active",
+        EmployeeMaster[Performance Score] = "Needs Improvement"
+    ),
+    [Active_Headcount],
+    0
+)
+
+(9)Dept_Avg_Salary_AEXCEPT = 
+CALCULATE(
+    [Avg_Salary],
+    ALLEXCEPT(
+        EmployeeMaster,
+        EmployeeMaster[DepartmentType]
+    )
+)
+
+
+(10)Distinct_Departments = 
+DISTINCTCOUNT(EmployeeMaster[DepartmentType])
+
+
+(11)Gender_Diversity_Ratio = 
+DIVIDE(
+    CALCULATE(
+        [Active_Headcount],
+        EmployeeMaster[GenderCode] = "Female"
+    ),
+    [Active_Headcount],
+    0
+)
+
+
+(12)Headcount_%_of_Total = 
+DIVIDE(
+    [Total_Headcount],
+    [Total_HC_All_Depts],
+    0
+)
+
+
+(13)High_Performer_% = 
+DIVIDE(
+    [High_Performers_Count],
+    [Active_Headcount],
+    0
+)
+
+
+(14)High_Performers_Count = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    EmployeeMaster[EmployeeStatus] = "Active",
+    EmployeeMaster[Current Employee Rating] >= 4
+)
+
+
+(15)Hires_Prior_3M = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    DATEADD(
+        DimDate[Date],
+        -3,
+        MONTH
+    )
+)
+
+
+(16)New_Hires_SPLY = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    SAMEPERIODLASTYEAR(DimDate[Date])
+)
+
+
+(17)New_Hires_YoY_% = 
+DIVIDE(
+    [YTD_New_Hires] - [New_Hires_SPLY],
+    [New_Hires_SPLY]
+)
+
+
+(18)Salary_Rank_Dept = RANKX(      ALL(EmployeeMaster[DepartmentType]),      [Avg_Salary],      ,      DESC,      Dense  )
+
+
+(19)Senior_Headcount = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    FILTER(
+        EmployeeMaster,
+        EmployeeMaster[Tenure_Years] >= 8
+    )
+)
+
+
+(20)Terminated_Count = 
+CALCULATE(
+    COUNTROWS(EmployeeMaster),
+    EmployeeMaster[Is_Active] = 0
+)
+
+
+(21)Total_HC_All_Depts = 
+CALCULATE(
+    [Total_Headcount],
+    ALL(EmployeeMaster[DepartmentType])
+)
+
+
+(22)Total_Headcount = 
+COUNTROWS(EmployeeMaster)
+
+
+(23)Total_Salary_Cost = 
+SUM(EmployeeMaster[Salary])
+
+
+(24)Total_Training_Cost = 
+SUMX(
+    Training,
+    Training[Training Cost]
+)
+
+
+(25)Training_Cost_Rank = 
+RANKX(
+    ALL(EmployeeMaster[DepartmentType]),
+    [Total_Training_Cost],
+    ,
+    DESC,
+    Dense
+)
+
+
+(26)YTD_New_Hires = 
+TOTALYTD(
+    COUNTROWS(EmployeeMaster),
+    DimDate[Date]
+)
