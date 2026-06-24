@@ -161,7 +161,7 @@ Metric      → field-parameter / dynamic metric selector table
 
 ## DAX formulas 
 
-[DAX Calculated Columns](DAX(1)calculated%20column).txt)
+[DAX Calculated Columns](DAX(1)calculated column).txt)
 
 ---
 
